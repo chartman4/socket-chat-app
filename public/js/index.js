@@ -1,6 +1,21 @@
 var socket = io();
-var user;
+var user='Admin';
 
+function scrollToBottom() {
+  //selectors
+  var messages = jQuery("#messages");
+  var newMessage = messages.children('li:last-child');
+  //heights
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight();
+
+  if (clientHeight + scrollTop >= scrollHeight) {
+    messages.scrollTop(scrollHeight)
+  };
+};
 socket.on('connect', function () {
   console.log('Connected to server');
 });
@@ -10,15 +25,17 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (message) {
-var formattedTime = moment(message.createdAt).format('h:mm a');
+  var formattedTime = moment(message.createdAt).format('h:mm a');
 
-var template = jQuery('#message-template').html();
-var html = Mustache.render(template, {
-  text: message.text,
-  from: message.from,
-  createdAt: formattedTime});
+  var template = jQuery('#message-template').html();
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
 
-jQuery('#messages').append(html);
+  jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 socket.on('newLocationMessage', function (message) {
@@ -28,26 +45,14 @@ socket.on('newLocationMessage', function (message) {
   var html = Mustache.render(template, {
     url: message.url,
     from: message.from,
-    createdAt: formattedTime});
-    
+    createdAt: formattedTime
+  });
+
   jQuery('#messages').append(html);
+  scrollToBottom();
 
 });
 
-jQuery('#login-form').on('submit', function (e) {
-  // prevent window refresh
-  e.preventDefault();
-  //show messages
-  jQuery(".messages").css("display", "block");
-  //save user name
-  user = jQuery('[name=user]').val();
-  //display user name
-  jQuery('#welcome').append(`  Logged in as ${user}`);
-  // make cursor at message text
-  jQuery("#message-text").focus();
-  // hide the login form once logged in
-  jQuery("#login-form").css("display", "none");
-});
 
 jQuery('#message-form').on('submit', function (e) {
   e.preventDefault();

@@ -9,33 +9,23 @@
  
 <body class="chat">
 
-  <form id="login-form">
-    <p>Enter your name:</p>
-    <input name="user" type="text" placeholder="name" autofocus/>
-    <button id="login-button">Login</button>
-  </form>
-
   <div class="chat__sidebar">
     <h3>People</h3>
     <div id="users"></div>
   </div>
 
   <div class="chat__main">
-    <div class="messages" style="display:none;" type="hidden">
       <ol id="messages" class="chat__messages"></ol>
 
       <div class="chat__footer">
-
         <form id="message-form">
-          <input id="message-text" name="message" type="text" placeholder="Message" autofocus autocomplete="off"/>
+          <input name="message" type="text" placeholder="Message" autofocus autocomplete="off"/>
           <button>Send</button>
         </form>
         <button id="send-location">Send Location</button>
-
       </div>
-
-    </div>
   </div>
+
 <script id="message-template" type="text/template">
  <li class="message">
    <div class="message__title">
